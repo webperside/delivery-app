@@ -1,13 +1,13 @@
 package com.webperside.deliveryapp.orderservice.exception;
 
 import com.webperside.deliveryapp.orderservice.dto.response.BaseResponse;
-import com.webperside.deliveryapp.orderservice.enums.ResponseMessages;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -19,6 +19,11 @@ import java.util.List;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     //DataIntegrityViolationException
+
+    @ExceptionHandler(BaseException.class)
+    public ResponseEntity<BaseResponse<?>> handleBaseException(BaseException ex){
+        return ResponseEntity.status(ex.getResponseMessage().status()).body(BaseResponse.error(ex));
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

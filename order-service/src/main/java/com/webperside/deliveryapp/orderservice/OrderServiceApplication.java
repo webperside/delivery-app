@@ -11,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
+
 @SpringBootApplication
 public class OrderServiceApplication implements CommandLineRunner {
 
@@ -24,21 +26,21 @@ public class OrderServiceApplication implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        AddressPoint startPoint = AddressPoint.builder()
-                .latitude(3.0)
-                .longitude(3.0)
-                .build();
-        AddressPoint desPoint = AddressPoint.builder()
-                .latitude(2.0)
-                .longitude(2.0)
-                .build();
-        Orders orders = new Orders();
-        orders.setCourierId(1L);
-        orders.setDescription("A");
-        orders.setTitle("a");
-        orders.setStatus(OrderStatus.PENDING);
-        orders.setStartAddress(startPoint);
-        orders.setDestinationAddress(desPoint);
+//        AddressPoint startPoint = AddressPoint.builder()
+//                .latitude(3.0)
+//                .longitude(3.0)
+//                .build();
+//        AddressPoint desPoint = AddressPoint.builder()
+//                .latitude(2.0)
+//                .longitude(2.0)
+//                .build();
+//        Orders orders = new Orders();
+//        orders.setCourierId(1L);
+//        orders.setDescription("A");
+//        orders.setTitle("a");
+//        orders.setStatus(OrderStatus.PENDING);
+//        orders.setStartAddress(startPoint);
+//        orders.setDestinationAddress(desPoint);
 //        orderService.insertOrUpdate(orders);
     }
 }
