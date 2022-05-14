@@ -1,6 +1,7 @@
 package com.webperside.deliveryapp.orderservice.dto.payload;
 
 import com.webperside.deliveryapp.orderservice.entity.Orders;
+import com.webperside.deliveryapp.orderservice.entity.Users;
 import com.webperside.deliveryapp.orderservice.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,21 +18,21 @@ import javax.validation.constraints.Size;
 @Builder
 public class CreateOrderPayload {
 
-    @Size(min=5, max = 100, message = "Title size must be between 5 and 100")
+    @Size(min = 5, max = 100, message = "{orders.title.size}")
     private String title;
-    @Size(max = 255, message = "Description max size must be 255")
+    @Size(max = 255, message = "{orders.description.size}")
     private String description;
     private Long courierId;
-    @NotNull(message = "Start address can not be null")
+    @NotNull(message = "{orders.address.notNull.start}")
     private @Valid AddressPointPayload startAddress;
-    @NotNull(message = "Destination address can not be null")
+    @NotNull(message = "{orders.address.notNull.destination}")
     private @Valid AddressPointPayload destinationAddress;
 
-    public Orders toEntity(){
+    public Orders toEntity(Users courier) {
         return Orders.builder()
                 .title(title)
                 .description(description)
-                .courierId(courierId)
+                .courier(courier)
                 .startAddress(startAddress.toEntity())
                 .destinationAddress(destinationAddress.toEntity())
                 .status(OrderStatus.PENDING)

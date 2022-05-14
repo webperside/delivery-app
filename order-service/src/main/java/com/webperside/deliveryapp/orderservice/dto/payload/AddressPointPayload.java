@@ -15,11 +15,11 @@ import javax.validation.constraints.DecimalMin;
 @Builder
 public class AddressPointPayload {
 
-    @DecimalMin(value = "-90", message = "Latitude must be a number between -90 and 90")
-    @DecimalMax(value = "90", message = "Latitude must be a number between -90 and 90")
+    @DecimalMin(value = "-90", message = "{orders.address.lat.size}")
+    @DecimalMax(value = "90", message = "{orders.address.lat.size}")
     private Double latitude;
-    @DecimalMin(value = "-180", message = "Longitude must a number between -180 and 180")
-    @DecimalMax(value = "180", message = "Longitude must a number between -180 and 180")
+    @DecimalMin(value = "-180", message = "{orders.address.long.size}")
+    @DecimalMax(value = "180", message = "{orders.address.long.size}")
     private Double longitude;
 
     public AddressPoint toEntity() {

@@ -46,12 +46,14 @@ public class Orders implements Serializable {
     @Column(name = "status")
     private OrderStatus status;
 
-    @Column(name = "courier_id")
-    private Long courierId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "courier_id", referencedColumnName = "id")
+    private Users courier;
 
-    @Column(name = "created_by")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", referencedColumnName = "id")
     @CreatedBy
-    private Long createdBy;
+    private Users createdBy;
 
     @Embedded
     @AttributeOverrides({

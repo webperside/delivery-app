@@ -1,14 +1,14 @@
-package com.webperside.deliveryapp.orderservice.dto.response;
+package com.webperside.deliveryapp.authservice.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.webperside.deliveryapp.orderservice.enums.ResponseMessages;
-import com.webperside.deliveryapp.orderservice.exception.BaseException;
-import com.webperside.deliveryapp.orderservice.util.ExceptionMessageUtil;
+import com.webperside.deliveryapp.authservice.enums.ResponseMessages;
+import com.webperside.deliveryapp.authservice.exception.BaseException;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder(access = AccessLevel.PRIVATE)
@@ -39,8 +39,13 @@ public class BaseResponse<T> implements Serializable {
         }
 
         public static BaseResponse_Message error(BaseException e) {
+            String msg = e.getResponseMessage().message();
+            BaseException.BaseException_NotFoundDto nfd = e.getNotFoundDto();
+            if(Objects.nonNull(nfd)){
+                msg = nfd.asString(msg);
+            }
             return BaseResponse_Message.builder()
-                    .message(ExceptionMessageUtil.of(e).asString())
+                    .message(msg)
                     .type(BaseResponse_MessageType.ERROR)
                     .build();
         }
@@ -91,7 +96,7 @@ public class BaseResponse<T> implements Serializable {
         return of(null, ResponseMessages.Error.VALIDATION_ERROR, validationMessages);
     }
 
-    public static BaseResponse<?> error(BaseException ex) {
+    public static BaseResponse<?> error(BaseException ex){
         return BaseResponse.builder()
                 .code(ex.getResponseMessage().code())
                 .status(ex.getResponseMessage().status())

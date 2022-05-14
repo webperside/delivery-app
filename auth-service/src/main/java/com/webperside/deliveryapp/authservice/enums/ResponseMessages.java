@@ -1,4 +1,4 @@
-package com.webperside.deliveryapp.orderservice.enums;
+package com.webperside.deliveryapp.authservice.enums;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,8 +36,7 @@ public interface ResponseMessages {
     enum Error implements ResponseMessages{
         ERROR("001","Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR),
         VALIDATION_ERROR("002","Validation Error", HttpStatus.BAD_REQUEST),
-        NOT_FOUND_BY("003","%s can't find by %s=%s", HttpStatus.NOT_FOUND),
-        LANGUAGE_NOT_SUPPORTED("004","%s language not supported", HttpStatus.BAD_REQUEST);
+        NOT_FOUND_BY("003","%s can't find by %s=%s", HttpStatus.NOT_FOUND);
 
         String code;
         String message;
