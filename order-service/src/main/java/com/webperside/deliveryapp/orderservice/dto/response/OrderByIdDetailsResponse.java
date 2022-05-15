@@ -41,6 +41,7 @@ public class OrderByIdDetailsResponse extends RepresentationModel<OrderByIdDetai
                 .description(orders.getDescription())
                 .status(orders.getStatus())
                 .createdAt(orders.getCreatedAt())
+                .modifiedAt(orders.getModifiedAt())
                 .startAddress(AddressPointResponse.fromEntity(orders.getStartAddress()))
                 .destinationAddress(AddressPointResponse.fromEntity(orders.getDestinationAddress()))
                 .courier(Optional.ofNullable(orders.getCourier()).map(OrderByIdDetailsResponse_User::fromEntity).orElse(null))

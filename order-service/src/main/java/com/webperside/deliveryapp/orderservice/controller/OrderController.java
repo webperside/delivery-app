@@ -1,13 +1,15 @@
 package com.webperside.deliveryapp.orderservice.controller;
 
 import com.webperside.deliveryapp.orderservice.dto.payload.CreateOrderPayload;
+import com.webperside.deliveryapp.orderservice.dto.payload.UpdateOrderPayload;
 import com.webperside.deliveryapp.orderservice.dto.response.BaseResponse;
 import com.webperside.deliveryapp.orderservice.dto.response.CreateOrderResponse;
 import com.webperside.deliveryapp.orderservice.dto.response.OrderByIdDetailsResponse;
 import com.webperside.deliveryapp.orderservice.dto.response.OrderByIdResponse;
 import com.webperside.deliveryapp.orderservice.serivce.business.OrderBusinessService;
+import com.webperside.deliveryapp.orderservice.util.Hateoas;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.LinkRelation;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +30,18 @@ public class OrderController {
         CreateOrderResponse newOrder = orderBusinessService.createNewOrder(payload);
         return ResponseEntity.ok(
                 BaseResponse.success(
-                        newOrder.add(
-                                linkTo(
-                                        methodOn(OrderController.class).findById(newOrder.getId())
-                                ).withSelfRel()
-                        )
+                        newOrder.add(Hateoas.Orders.info(newOrder.getId()))
+                )
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponse<?>> updateOrder(@PathVariable("id") Long id,
+                                                       @Valid @RequestBody UpdateOrderPayload payload) {
+        orderBusinessService.updateOrder(id, payload);
+        return ResponseEntity.ok(
+                BaseResponse.success(
+                        new RepresentationModel<>().add(Hateoas.Orders.info(id))
                 )
         );
     }
@@ -53,7 +62,7 @@ public class OrderController {
 
     @GetMapping("/details/{id}")
     public ResponseEntity<BaseResponse<?>> findByIdDetails(@PathVariable("id") Long id) {
-        OrderByIdDetailsResponse response =  orderBusinessService.findByIdDetails(id);
+        OrderByIdDetailsResponse response = orderBusinessService.findByIdDetails(id);
         return ResponseEntity.ok(
                 BaseResponse.success(
                         response.add(

@@ -17,11 +17,11 @@ public class BaseException extends RuntimeException {
     BaseException_NotFoundDto notFoundDto;
     BaseException_ReplaceMessageDto replaceMessageDto;
 
-    public enum ExceptionType{
+    public enum ExceptionType {
         DEFAULT, NOT_FOUND, REPLACE_MESSAGE
     }
 
-    public abstract static class BaseException_BaseType{
+    public abstract static class BaseException_BaseType {
         public abstract String asString(String msg);
     }
 
@@ -68,6 +68,10 @@ public class BaseException extends RuntimeException {
     public static BaseException of(ResponseMessages message) {
         return BaseException.builder().exceptionType(ExceptionType.DEFAULT)
                 .responseMessage(message).build();
+    }
+
+    public static BaseException of(Exception ex) {
+        return ofReplace(ResponseMessages.Error.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     public static BaseException ofReplace(ResponseMessages message, String replace) {

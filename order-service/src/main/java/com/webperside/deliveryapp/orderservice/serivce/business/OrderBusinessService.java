@@ -1,15 +1,17 @@
 package com.webperside.deliveryapp.orderservice.serivce.business;
 
 import com.webperside.deliveryapp.orderservice.dto.payload.CreateOrderPayload;
+import com.webperside.deliveryapp.orderservice.dto.payload.UpdateOrderPayload;
 import com.webperside.deliveryapp.orderservice.dto.response.CreateOrderResponse;
 import com.webperside.deliveryapp.orderservice.dto.response.OrderByIdDetailsResponse;
 import com.webperside.deliveryapp.orderservice.dto.response.OrderByIdResponse;
-import com.webperside.deliveryapp.orderservice.entity.Orders;
+import com.webperside.deliveryapp.orderservice.entity.Users;
 import com.webperside.deliveryapp.orderservice.serivce.functional.OrderService;
 import com.webperside.deliveryapp.orderservice.serivce.functional.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +24,17 @@ public class OrderBusinessService {
         return CreateOrderResponse.of(
                 orderService.insertOrUpdate(
                         createOrderPayload.toEntity(
-                                userService.findById(createOrderPayload.getCourierId())
+                                findCourierIfIdNotNull(createOrderPayload.getCourierId())
                         )).getId()
+        );
+    }
+
+    public void updateOrder(Long id, UpdateOrderPayload updateOrderPayload) {
+        orderService.insertOrUpdate(
+                updateOrderPayload.updateEntity(
+                        orderService.findById(id),
+                        findCourierIfIdNotNull(updateOrderPayload.getCourierId())
+                )
         );
     }
 
@@ -37,4 +48,9 @@ public class OrderBusinessService {
         return OrderByIdDetailsResponse.fromEntity(orderService.findById(id));
     }
 
+    private Users findCourierIfIdNotNull(Long courierId) {
+        return Optional.ofNullable(
+                courierId
+        ).map(userService::findById).orElse(null);
+    }
 }

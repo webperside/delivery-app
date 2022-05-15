@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -34,7 +33,9 @@ public class ExceptionMessageUtil {
         return asStringByType.getOrDefault(
                 ex.getExceptionType(),
                 asStringByType.get(BaseException.ExceptionType.DEFAULT)
-        ).apply(ex).asString(ex.getResponseMessage().message());
+        ).apply(ex).asString(
+                StaticMessageSource.get(ex.getResponseMessage().message())
+        );
     }
 
     public static ExceptionMessageUtil of(BaseException ex){

@@ -1,6 +1,7 @@
 package com.webperside.deliveryapp.orderservice.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.webperside.deliveryapp.orderservice.util.StaticMessageSource;
 import com.webperside.deliveryapp.orderservice.enums.ResponseMessages;
 import com.webperside.deliveryapp.orderservice.exception.BaseException;
 import com.webperside.deliveryapp.orderservice.util.ExceptionMessageUtil;
@@ -33,7 +34,7 @@ public class BaseResponse<T> implements Serializable {
 
         public static <E extends ResponseMessages> BaseResponse_Message of(E e) {
             return BaseResponse_Message.builder()
-                    .message(e.message())
+                    .message(StaticMessageSource.get(e.message()))
                     .type(e instanceof ResponseMessages.Success ? BaseResponse_MessageType.SUCCESS : BaseResponse_MessageType.ERROR)
                     .build();
         }
