@@ -4,6 +4,9 @@ import com.webperside.deliveryapp.orderservice.enums.ResponseMessages;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder(access = AccessLevel.PRIVATE)
@@ -33,16 +36,24 @@ public class BaseException extends RuntimeException {
     @FieldDefaults(level = AccessLevel.PRIVATE)
     public static class BaseException_NotFoundDto extends BaseException_BaseType {
         Class<?> clazz;
-        String field;
-        Object value;
+        Map<String, Object> fields;
 
         public static BaseException_NotFoundDto of(Class<?> clazz, String field, Object value) {
-            return BaseException_NotFoundDto.builder().clazz(clazz).field(field).value(value).build();
+            return BaseException_NotFoundDto.builder().clazz(clazz).fields(Map.of(field, value)).build();
+        }
+
+        public static BaseException_NotFoundDto of(Class<?> clazz, Map<String, Object> fields) {
+            return BaseException_NotFoundDto.builder().clazz(clazz).fields(fields).build();
         }
 
         @Override
         public String asString(String base) {
-            return String.format(base, this.getClazz().getSimpleName(), this.getField(), this.getValue());
+            return String.format(base,
+                    this.getClazz().getSimpleName(),
+                    fields.entrySet().stream()
+                            .map((e) -> String.format("%s=%s", e.getKey(), e.getValue()))
+                            .collect(Collectors.joining(","))
+            );
         }
     }
 
